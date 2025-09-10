@@ -1,10 +1,13 @@
-import {Page} from '@playwright/test'
-import { CookieModal } from "./CookieModal"
+import { Page } from '@playwright/test'
+import { CookieModal } from './CookieModal'
 import { CableGuyPage } from './CableGuyPage'
 import { ProductPage } from './ProductPage'
 import { BasketPage } from './BasketPage'
 
-
+/**
+ * Central manager for all page objects.
+ * Provides easy access to page components and modals.
+ */
 export class PageManager {
 
     private readonly page: Page
@@ -15,27 +18,31 @@ export class PageManager {
 
     constructor(page: Page) {
         this.page = page
+
+        // Initialize all page objects
         this.cookieModal = new CookieModal(this.page)
         this.cableGuyPage = new CableGuyPage(this.page)
         this.productPage = new ProductPage(this.page)
         this.basketPage = new BasketPage(this.page)
     }
 
-    onCookieModal() {
+    /** Accessor for the cookie modal */
+    onCookieModal(): CookieModal {
         return this.cookieModal
     }
 
-    onCableGuyPage() {
+    /** Accessor for the CableGuy page */
+    onCableGuyPage(): CableGuyPage {
         return this.cableGuyPage
     }
 
-    onProductPage() {
+    /** Accessor for the Product page */
+    onProductPage(): ProductPage {
         return this.productPage
     }
 
-    onBasketPage() {
+    /** Accessor for the Basket page */
+    onBasketPage(): BasketPage {
         return this.basketPage
     }
-
 }
-

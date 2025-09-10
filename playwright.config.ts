@@ -17,7 +17,6 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { 
-        baseURL: 'https://www.thomann.de/intl',
         ...devices['Desktop Chrome'] },
     }
   ],
