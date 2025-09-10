@@ -14,9 +14,9 @@ export class ProductPage {
         this.addToBasketButton = page.getByRole('button', {name: 'Add to Basket'})
     }
 
-    async getProductName() {
-        const productName = await this.productName.textContent()
-        return Helper.normalizeWhiteSpace(productName)
+    async getProductName(): Promise<string> {
+        const text = await this.productName.textContent()
+        return Helper.normalizeWhiteSpace(text)
     }
 
     async addProductToBasket() {

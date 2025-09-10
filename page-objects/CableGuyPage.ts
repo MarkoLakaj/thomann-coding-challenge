@@ -1,7 +1,8 @@
-import {Page, Locator, expect} from '@playwright/test'
+import {Page, Locator} from '@playwright/test'
+import { Helper } from '../utils/Helper'
 
 
-export class CableGuyPage{
+export class CableGuyPage {
 
     private readonly page: Page
     private readonly addCableBeginningButton: Locator
@@ -27,32 +28,33 @@ export class CableGuyPage{
         await this.addCableEndButton.click()
     }
 
-    async selectRandomItemFromTheList(itemLocator: Locator) {
-
-        const count = await itemLocator.count()
-        if (count === 0) throw new Error('No item found!')
-
-        const randomIndex = Math.floor(Math.random() * count)
-        await itemLocator.nth(randomIndex).waitFor({ state: 'visible' })
-        await itemLocator.nth(randomIndex).click()
-        // Temporary brute-forcing the timeout in order to wait for the list to update, in order to not waste time
-        await this.page.waitForTimeout(2000)
-    }
-
     async verifyItemListMatchesManufacturersNumberOfProducts() {
         const manufacturerProducts = this.page.locator('.cg-brands__item.clicked.active + .cg-brands__item__count')
         const manufacturerProductsValue = parseInt((await manufacturerProducts.textContent()) || '0', 10)
-        const numberOfFoundItems = await this.foundItemsList.count()
+        const numberOfFoundItems = await this.countAllFoundItems()
         return manufacturerProductsValue === numberOfFoundItems
     }
 
-    // Wrappers for test readability
-    async selectRandomCableType() {
-        await this.selectRandomItemFromTheList(this.cableTypeList)
-    }
+    async countAllFoundItems(): Promise<number> {
+        let totalCount = 0
+        let hasNext = true
 
-    async selectRandomManufacturer() {
-        await this.selectRandomItemFromTheList(this.manufacturerList)
+        while (hasNext) {
+            // Count items on current page
+            const currentCount = await this.foundItemsList.count()
+            totalCount += currentCount
+
+            // Check if "Next" button exists and is enabled
+            const nextButton = this.page.locator('.cg-icons__arrow--right')
+            if (await nextButton.isVisible() && await nextButton.isEnabled()) {
+                await nextButton.click()
+                await this.page.waitForLoadState('networkidle')
+            } else {
+                hasNext = false
+            }
+        }
+
+        return totalCount
     }
 
     async selectRandomListedItem() {
@@ -66,13 +68,22 @@ export class CableGuyPage{
         const itemName = await randomItemSelected.locator('.title__name').textContent()
         const productName = `${itemManufacturer}${itemName}`
         await randomItemSelected.click()
-        console.log(productName)
         return productName
     }
 
-    
+    // Wrappers for test readability
+    async selectRandomCableType() {
+        await Helper.selectRandomItemFromTheList(this.cableTypeList)
+        // This should be removed ASAP, and replaced with more elegant solution
+        // right now it serves as a coding challenge time saver
+        await this.page.waitForTimeout(2000)
+    }
 
-    
-
+    async selectRandomManufacturer() {
+        await Helper.selectRandomItemFromTheList(this.manufacturerList)
+        // This should be removed ASAP, and replaced with more elegant solution
+        // right now it serves as a coding challenge time saver
+        await this.page.waitForTimeout(2000)
+    }
 
 }

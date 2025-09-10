@@ -18,4 +18,8 @@ test('Verify the matching number of manufacturers for a random cable', async({pa
     const productName = await pageManager.onCableGuyPage().selectRandomListedItem()
     expect(await pageManager.onProductPage().getProductName()).toBe(productName)
 
+    await pageManager.onProductPage().addProductToBasket()
+    const popupText = await pageManager.onBasketPage().getBasketNotificationPopupText()
+    expect(popupText).toContain(productName)
+
 })
