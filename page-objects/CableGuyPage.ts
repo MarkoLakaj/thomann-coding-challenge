@@ -43,7 +43,6 @@ export class CableGuyPage{
         const manufacturerProducts = this.page.locator('.cg-brands__item.clicked.active + .cg-brands__item__count')
         const manufacturerProductsValue = parseInt((await manufacturerProducts.textContent()) || '0', 10)
         const numberOfFoundItems = await this.foundItemsList.count()
-        console.log(numberOfFoundItems)
         return manufacturerProductsValue === numberOfFoundItems
     }
 
@@ -54,6 +53,21 @@ export class CableGuyPage{
 
     async selectRandomManufacturer() {
         await this.selectRandomItemFromTheList(this.manufacturerList)
+    }
+
+    async selectRandomListedItem() {
+
+        const count = await this.foundItemsList.count()
+        if (count === 0) throw new Error('No item found!')
+
+        const randomIndex = Math.floor(Math.random() * count)
+        const randomItemSelected = this.foundItemsList.nth(randomIndex)
+        const itemManufacturer = await randomItemSelected.locator('.title__manufacturer').textContent()
+        const itemName = await randomItemSelected.locator('.title__name').textContent()
+        const productName = `${itemManufacturer}${itemName}`
+        await randomItemSelected.click()
+        console.log(productName)
+        return productName
     }
 
     

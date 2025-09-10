@@ -15,5 +15,7 @@ test('Verify the matching number of manufacturers for a random cable', async({pa
     await pageManager.onCableGuyPage().selectRandomManufacturer()
     expect(await pageManager.onCableGuyPage().verifyItemListMatchesManufacturersNumberOfProducts()).toBe(true)
 
-    
+    const productName = await pageManager.onCableGuyPage().selectRandomListedItem()
+    expect(await pageManager.onProductPage().getProductName()).toBe(productName)
+
 })
