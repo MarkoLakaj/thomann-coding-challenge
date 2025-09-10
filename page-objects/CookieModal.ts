@@ -1,5 +1,6 @@
 import { Page, Locator } from "@playwright/test";
 
+
 export class CookieModal {
 
     private readonly page: Page
@@ -10,11 +11,12 @@ export class CookieModal {
 
         this.page = page
         this.acceptCookiesButton = page.getByRole('button').filter({hasText: 'Alright!'})
-
     }
 
-    acceptCookies() {
-        this.acceptCookiesButton.click()
+    async acceptCookies() {
+         if (await this.acceptCookiesButton.isVisible()) {
+            await this.acceptCookiesButton.click()
+        }
     }
 
 }
