@@ -11,7 +11,7 @@ export class ProductPage {
     constructor(page: Page) {
         this.page = page
         this.productName = page.locator('.product-title [itemprop="name"]')
-        this.addToBasketButton = page.getByRole('button', {name: 'Add to Basket'})
+        this.addToBasketButton = page.locator('.call-to-action__action')
     }
 
     async getProductName(): Promise<string> {

@@ -6,7 +6,7 @@ test('Verify the matching number of manufacturers for a random cable', async({pa
 
     const pageManager = new PageManager(page)
 
-    await page.goto('https://www.thomann.de/intl/cableguy.html')
+    await page.goto('/cableguy.html')
     await pageManager.onCookieModal().acceptCookies()
     await pageManager.onCableGuyPage().clickCableBeginningButton()
     await pageManager.onCableGuyPage().selectRandomCableType()

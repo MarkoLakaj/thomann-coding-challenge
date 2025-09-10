@@ -10,7 +10,7 @@ export class CookieModal {
     constructor(page: Page) {
 
         this.page = page
-        this.acceptCookiesButton = page.getByRole('button').filter({hasText: 'Alright!'})
+        this.acceptCookiesButton = page.locator('.consent-button--primary')
     }
 
     async acceptCookies() {

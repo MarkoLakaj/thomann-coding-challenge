@@ -13,8 +13,8 @@ export class CableGuyPage {
 
     constructor(page: Page) {
         this.page = page
-        this.addCableBeginningButton = page.getByRole('button').filter({hasText: 'cable beginning'})
-        this.addCableEndButton = page.getByRole('button').filter({hasText: 'cable end'})
+        this.addCableBeginningButton = page.locator('.cg-plugButton--left')
+        this.addCableEndButton = page.locator('.cg-plugButton--right')
         this.cableTypeList = page.locator('.items .cg-plugItem')
         this.manufacturerList = page.locator('.items .cg-brands__item')
         this.foundItemsList = page.locator('.fx-product-list-entry')
